@@ -1,0 +1,15 @@
+2026-10-11T16:08:03Z
+NAMESPACE_IDENTITY_UNCHANGED
+blockpoolID=BP-379092889-127.0.1.1-1791734418756
+cTime=1791734418756
+clusterID=hw1-hdfs
+layoutVersion=-67
+namespaceID=770717332
+storageType=NAME_NODE
+EXISTING_PROBE_CONTENT_UNCHANGED
+Original probe: /hw1-check/check-20261011T160449Z-18950.txt
+690525c05aed9d76c9f86711da3eb85e2af7521cb06078588656595d67d9e3fa  -
+HOSTS_FILES_UNCHANGED
+NameNode already formatted; keeping its namespace.
+VERIFY_OK
+Probe retained for inspection: /hw1-check/check-20261011T160737Z-29479.txt

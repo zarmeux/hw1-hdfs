@@ -1,0 +1,18 @@
+{
+  "name": "Hadoop:service=NameNode,name=FSNamesystemState",
+  "FSState": "Operational",
+  "NumLiveDataNodes": 3,
+  "NumInServiceLiveDataNodes": 3,
+  "NumDeadDataNodes": 0,
+  "NumStaleDataNodes": 0,
+  "NumDecomLiveDataNodes": 0,
+  "NumDecomDeadDataNodes": 0,
+  "VolumeFailuresTotal": 0,
+  "UnderReplicatedBlocks": 0,
+  "PendingReplicationBlocks": 0,
+  "BlocksTotal": 2,
+  "FilesTotal": 4,
+  "CapacityTotal": 152652324864,
+  "CapacityUsed": 74112,
+  "CapacityRemaining": 135625416704
+}

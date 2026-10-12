@@ -1,0 +1,13 @@
+cache/
+logs/
+*.pem
+*.key
+*.p12
+*.pfx
+*.netrc
+secrets/
+__pycache__/
+*access-private*
+id_*
+*ed25519*
+cluster.local.env

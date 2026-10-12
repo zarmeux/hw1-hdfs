@@ -1,0 +1,191 @@
+/home/team/hw1-hdfs/cache/hadoop-3.4.2.tar.gz: OK
+NameNode already formatted; keeping its namespace.
+Waiting for three live DataNodes and safe mode OFF (up to 180 s)...
+active
+10.34.0.11: active
+10.34.0.12: active
+10.34.0.13: active
+active
+Configured Capacity: 152652324864 (142.17 GB)
+Present Capacity: 135625556160 (126.31 GB)
+DFS Remaining: 135625482240 (126.31 GB)
+DFS Used: 73920 (72.19 KB)
+DFS Used%: 0.00%
+Replicated Blocks:
+	Under replicated blocks: 0
+	Blocks with corrupt replicas: 0
+	Missing blocks: 0
+	Missing blocks (with replication factor 1): 0
+	Low redundancy blocks with highest priority to recover: 0
+	Pending deletion blocks: 0
+Erasure Coded Block Groups: 
+	Low redundancy block groups: 0
+	Block groups with corrupt internal blocks: 0
+	Missing block groups: 0
+	Low redundancy blocks with highest priority to recover: 0
+	Pending deletion blocks: 0
+
+-------------------------------------------------
+Live datanodes (3):
+
+Name: 10.34.0.11:9866 (team-34-nn)
+Hostname: 10.34.0.11
+Decommission Status : Normal
+Configured Capacity: 50884108288 (47.39 GB)
+DFS Used: 24640 (24.06 KB)
+Non DFS Used: 5660258240 (5.27 GB)
+DFS Remaining: 45207048192 (42.10 GB)
+DFS Used%: 0.00%
+DFS Remaining%: 88.84%
+Configured Cache Capacity: 0 (0 B)
+Cache Used: 0 (0 B)
+Cache Remaining: 0 (0 B)
+Cache Used%: 100.00%
+Cache Remaining%: 0.00%
+Xceivers: 0
+Last contact: Sun Oct 11 16:07:37 UTC 2026
+Last Block Report: Sun Oct 11 16:04:37 UTC 2026
+Num of Blocks: 1
+
+
+Name: 10.34.0.12:9866 (team-34-00)
+Hostname: 10.34.0.12
+Decommission Status : Normal
+Configured Capacity: 50884108288 (47.39 GB)
+DFS Used: 24640 (24.06 KB)
+Non DFS Used: 5658275776 (5.27 GB)
+DFS Remaining: 45209030656 (42.10 GB)
+DFS Used%: 0.00%
+DFS Remaining%: 88.85%
+Configured Cache Capacity: 0 (0 B)
+Cache Used: 0 (0 B)
+Cache Remaining: 0 (0 B)
+Cache Used%: 100.00%
+Cache Remaining%: 0.00%
+Xceivers: 0
+Last contact: Sun Oct 11 16:07:35 UTC 2026
+Last Block Report: Sun Oct 11 16:04:38 UTC 2026
+Num of Blocks: 1
+
+
+Name: 10.34.0.13:9866 (team-34-01)
+Hostname: 10.34.0.13
+Decommission Status : Normal
+Configured Capacity: 50884108288 (47.39 GB)
+DFS Used: 24640 (24.06 KB)
+Non DFS Used: 5657903040 (5.27 GB)
+DFS Remaining: 45209403392 (42.10 GB)
+DFS Used%: 0.00%
+DFS Remaining%: 88.85%
+Configured Cache Capacity: 0 (0 B)
+Cache Used: 0 (0 B)
+Cache Remaining: 0 (0 B)
+Cache Used%: 100.00%
+Cache Remaining%: 0.00%
+Xceivers: 0
+Last contact: Sun Oct 11 16:07:36 UTC 2026
+Last Block Report: Sun Oct 11 16:04:39 UTC 2026
+Num of Blocks: 1
+
+
+Replication 3 set: /hw1-check/check-20261011T160737Z-29479.txt
+Waiting for /hw1-check/check-20261011T160737Z-29479.txt ... done
+Connecting to namenode via http://10.34.0.11:9870/fsck?ugi=hadoop&files=1&blocks=1&locations=1&path=%2Fhw1-check%2Fcheck-20261011T160737Z-29479.txt
+FSCK started by hadoop (auth:SIMPLE) from /10.34.0.11 for path /hw1-check/check-20261011T160737Z-29479.txt at Sun Oct 11 16:07:53 UTC 2026
+
+/hw1-check/check-20261011T160737Z-29479.txt 53 bytes, replicated: replication=3, 1 block(s):  OK
+0. BP-379092889-127.0.1.1-1791734418756:blk_1073741826_1002 len=53 Live_repl=3  [DatanodeInfoWithStorage[10.34.0.13:9866,DS-c61ea8f7-e1f7-48c9-8d8d-af9aac84540d,DISK], DatanodeInfoWithStorage[10.34.0.12:9866,DS-35ed67eb-4738-4d11-97aa-ce990ed5f5b6,DISK], DatanodeInfoWithStorage[10.34.0.11:9866,DS-aacafef8-fc9c-4ddf-9c87-35f6ae57cc51,DISK]]
+
+
+Status: HEALTHY
+ Number of data-nodes:	3
+ Number of racks:		1
+ Total dirs:			0
+ Total symlinks:		0
+
+Replicated Blocks:
+ Total size:	53 B
+ Total files:	1
+ Total blocks (validated):	1 (avg. block size 53 B)
+ Minimally replicated blocks:	1 (100.0 %)
+ Over-replicated blocks:	0 (0.0 %)
+ Under-replicated blocks:	0 (0.0 %)
+ Mis-replicated blocks:		0 (0.0 %)
+ Default replication factor:	3
+ Average block replication:	3.0
+ Missing blocks:		0
+ Corrupt blocks:		0
+ Missing replicas:		0 (0.0 %)
+ Blocks queued for replication:	0
+
+Erasure Coded Block Groups:
+ Total size:	0 B
+ Total files:	0
+ Total block groups (validated):	0
+ Minimally erasure-coded block groups:	0
+ Over-erasure-coded block groups:	0
+ Under-erasure-coded block groups:	0
+ Unsatisfactory placement block groups:	0
+ Average block group size:	0.0
+ Missing block groups:		0
+ Corrupt block groups:		0
+ Missing internal blocks:	0
+ Blocks queued for replication:	0
+FSCK ended at Sun Oct 11 16:07:53 UTC 2026 in 4 milliseconds
+
+
+The filesystem under path '/hw1-check/check-20261011T160737Z-29479.txt' is HEALTHY
+Checking all HDFS files...
+Connecting to namenode via http://10.34.0.11:9870/fsck?ugi=hadoop&files=1&blocks=1&path=%2F
+FSCK started by hadoop (auth:SIMPLE) from /10.34.0.11 for path / at Sun Oct 11 16:07:56 UTC 2026
+
+/ <dir>
+/hw1-check <dir>
+/hw1-check/check-20261011T160449Z-18950.txt 53 bytes, replicated: replication=3, 1 block(s):  OK
+0. BP-379092889-127.0.1.1-1791734418756:blk_1073741825_1001 len=53 Live_repl=3
+
+/hw1-check/check-20261011T160737Z-29479.txt 53 bytes, replicated: replication=3, 1 block(s):  OK
+0. BP-379092889-127.0.1.1-1791734418756:blk_1073741826_1002 len=53 Live_repl=3
+
+
+Status: HEALTHY
+ Number of data-nodes:	3
+ Number of racks:		1
+ Total dirs:			2
+ Total symlinks:		0
+
+Replicated Blocks:
+ Total size:	106 B
+ Total files:	2
+ Total blocks (validated):	2 (avg. block size 53 B)
+ Minimally replicated blocks:	2 (100.0 %)
+ Over-replicated blocks:	0 (0.0 %)
+ Under-replicated blocks:	0 (0.0 %)
+ Mis-replicated blocks:		0 (0.0 %)
+ Default replication factor:	3
+ Average block replication:	3.0
+ Missing blocks:		0
+ Corrupt blocks:		0
+ Missing replicas:		0 (0.0 %)
+ Blocks queued for replication:	0
+
+Erasure Coded Block Groups:
+ Total size:	0 B
+ Total files:	0
+ Total block groups (validated):	0
+ Minimally erasure-coded block groups:	0
+ Over-erasure-coded block groups:	0
+ Under-erasure-coded block groups:	0
+ Unsatisfactory placement block groups:	0
+ Average block group size:	0.0
+ Missing block groups:		0
+ Corrupt block groups:		0
+ Missing internal blocks:	0
+ Blocks queued for replication:	0
+FSCK ended at Sun Oct 11 16:07:56 UTC 2026 in 4 milliseconds
+
+
+The filesystem under path '/' is HEALTHY
+HDFS logs: ERROR/FATAL lines (empty output is expected on a healthy deployment)
+VERIFY_OK
+Probe retained for inspection: /hw1-check/check-20261011T160737Z-29479.txt

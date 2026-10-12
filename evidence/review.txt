@@ -1,0 +1,20 @@
+HDFS review: 2026-10-11T17:14:13Z
+SERVICE_OK 10.34.0.11 namenode active/enabled
+SERVICE_OK 10.34.0.10 secondarynamenode active/enabled
+SERVICE_OK 10.34.0.11 datanode active/enabled
+SERVICE_OK 10.34.0.12 datanode active/enabled
+SERVICE_OK 10.34.0.13 datanode active/enabled
+METRIC_OK NumLiveDataNodes=3
+METRIC_OK NumInServiceLiveDataNodes=3
+METRIC_OK NumDeadDataNodes=0
+METRIC_OK NumStaleDataNodes=0
+METRIC_OK VolumeFailuresTotal=0
+METRIC_OK UnderReplicatedBlocks=0
+METRIC_OK PendingReplicationBlocks=0
+Safe mode is OFF
+Connecting to namenode via http://10.34.0.11:9870/fsck?ugi=hadoop&files=1&blocks=1&path=%2F
+FSCK_OK / HEALTHY
+Connecting to namenode via http://10.34.0.11:9870/fsck?ugi=hadoop&files=1&blocks=1&locations=1&path=%2Fhw1-check
+REPLICATION_OK /hw1-check Live_repl=3
+CHECKPOINT_OK SecondaryNameNode fsimage exists
+REVIEW_OK
