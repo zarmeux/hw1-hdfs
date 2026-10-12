@@ -11,3 +11,8 @@ __pycache__/
 id_*
 *ed25519*
 cluster.local.env
+
+# Local deployment output and macOS metadata
+logs-*.txt
+.DS_Store
+._*
