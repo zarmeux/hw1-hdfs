@@ -1,10 +1,10 @@
-# ДЗ №1. Развёртывание HDFS
+# ДЗ №1 — развёртывание HDFS
 
-В этом задании я развернул HDFS на четырёх виртуальных машинах команды team-34: NameNode, SecondaryNameNode и три DataNode. Установку автоматизировал Bash-скриптами, а последовательность действий описал в [INSTALL.md](INSTALL.md).
+Мы развернули HDFS на четырёх виртуальных машинах команды team-34: один NameNode, один SecondaryNameNode и три DataNode. Установку сделали через Bash-скрипты, а порядок действий описали в [INSTALL.md](INSTALL.md).
 
-## Стенд
+## Как устроен кластер
 
-Использовал Ubuntu 24.04, OpenJDK 11 и Hadoop 3.4.2. На каждой ВМ — 2 vCPU, около 4 GiB оперативной памяти и 48 GiB диска.
+На всех машинах используем Ubuntu 24.04, OpenJDK 11 и Hadoop 3.4.2. У каждой ВМ по 2 vCPU, около 4 GiB памяти и 48 GiB диска.
 
 | Машина | Внутренний IP | Роль |
 |---|---|---|
@@ -13,52 +13,67 @@
 | team-34-00 | 10.34.0.12 | DataNode |
 | team-34-01 | 10.34.0.13 | DataNode |
 
-Внешний адрес edge — `111.88.130.214`. Внутренние машины доступны через него по SSH. NameNode и DataNode разместил на одной ВМ, чтобы на четырёх машинах получить три узла хранения и вынести SecondaryNameNode на отдельную машину. SecondaryNameNode создаёт checkpoint метаданных; резервным NameNode с автоматическим переключением он не является.
+К edge подключаемся по внешнему адресу `111.88.130.214`. Остальные машины доступны через него по SSH.
 
-## Установка и настройки
+NameNode и один DataNode мы разместили на одной ВМ: так на четырёх машинах получилось три узла хранения, а SecondaryNameNode остался на отдельном узле. Он создаёт контрольные точки метаданных, но не заменяет NameNode при отказе.
 
-Развёртывание запускал с edge из `/home/team/hw1-hdfs`:
+## Установка
+
+На edge из папки `/home/team/hw1-hdfs`:
 
 ```bash
 bash scripts/deploy.sh
 ```
 
-Скрипт скачивает Hadoop из архива Apache, проверяет SHA-512 дистрибутива и устанавливает его на все узлы. Для запуска демонов создал системного пользователя `hadoop`. Дистрибутив находится в `/opt/hadoop-3.4.2`, ссылка `/opt/hadoop` указывает на него.
+Скрипт скачивает Hadoop, проверяет SHA-512, устанавливает Java и настраивает все узлы. Для демонов мы создали отдельного пользователя `hadoop`. Службы работают через systemd и включены в автозапуск.
 
-Конфигурацию вынес в `/etc/hadoop`. В `core-site.xml` задал `fs.defaultFS=hdfs://10.34.0.11:9000`, в `hdfs-site.xml` — репликацию 3, адреса служб и каталоги хранения. Метаданные NameNode находятся в `/var/lib/hadoop-hdfs/namenode`, блоки DataNode — в `/var/lib/hadoop-hdfs/datanode`, checkpoint — в `/var/lib/hadoop-hdfs/secondary`.
+Основные пути:
 
-Демоны запускаются через systemd: `hadoop-namenode`, `hadoop-datanode` и `hadoop-secondarynamenode`. Службы включены в автозапуск. Для NameNode выделил heap 768 MiB, для DataNode и SecondaryNameNode — по 512 MiB.
+| Что | Где |
+|---|---|
+| Hadoop | `/opt/hadoop-3.4.2`, ссылка `/opt/hadoop` |
+| Конфигурация | `/etc/hadoop` |
+| Метаданные NameNode | `/var/lib/hadoop-hdfs/namenode` |
+| Блоки DataNode | `/var/lib/hadoop-hdfs/datanode` |
+| Контрольные точки | `/var/lib/hadoop-hdfs/secondary` |
+| Логи | `/var/log/hadoop-hdfs` |
 
-Форматирование NameNode выполняется только при первой установке в пустой каталог. Наличие `current/VERSION` означает, что namespace уже создан. Если каталог непустой, но VERSION отсутствует, скрипт останавливается. Так повторный запуск установки не уничтожает существующую файловую систему.
+В `core-site.xml` мы указали `fs.defaultFS=hdfs://10.34.0.11:9000`, а в `hdfs-site.xml` — репликацию 3, адреса служб и каталоги хранения. Параметры стенда находятся в [cluster.env](cluster.env). Для другого стенда их можно переопределить в `cluster.local.env`.
 
-Адреса машин, внутренний SSH-ключ и версия Hadoop задаются в [cluster.env](cluster.env). Для другого стенда параметры можно переопределить в `cluster.local.env`; этот файл исключён из Git. Полная последовательность установки и команды управления службами находятся в [INSTALL.md](INSTALL.md).
+Форматирование NameNode выполняется только при пустом каталоге. Если есть `current/VERSION`, скрипт сохраняет существующую файловую систему. Непустой каталог без этого файла вызывает остановку установки.
 
-## Проверка работы
+## Что мы проверили
 
-После установки выполнил `scripts/verify.sh`: записал в HDFS тестовый файл, прочитал его обратно и сравнил содержимое. Проверка завершилась `VERIFY_OK`. Затем повторно запустил установку и убедился, что идентификаторы namespace и ранее записанный файл сохранились.
+После установки мы записали тестовый файл в HDFS, прочитали его обратно и сравнили содержимое. Затем повторно запустили установку: namespace и уже записанный файл сохранились.
 
-В HDFS остались два тестовых файла:
+Проверки показали:
+
+- три DataNode работают и находятся в обслуживании; dead и stale узлов нет;
+- safe mode выключен;
+- у тестовых файлов по три реплики на разных DataNode;
+- полный `fsck` возвращает `HEALTHY`: потерянных, повреждённых и недореплицированных блоков нет;
+- SecondaryNameNode создаёт непустые `fsimage`;
+- при функциональной проверке в логах HDFS не было сообщений ERROR/FATAL.
+
+![Три работающих DataNode](evidence/datanodes.png)
+
+Тестовые файлы оставили в HDFS:
 
 ```text
 /hw1-check/check-20261011T160449Z-18950.txt
 /hw1-check/check-20261011T160737Z-29479.txt
 ```
 
-У каждого файла один блок и три реплики на разных DataNode. `fsck` показал `HEALTHY`: потерянных, повреждённых и недореплицированных блоков нет. Safe mode выключен. В интерфейсе NameNode отображаются три работающих DataNode, без dead и stale узлов.
-
-![Три работающих DataNode](evidence/datanodes.png)
-
-В логах при функциональной проверке критических сообщений ERROR/FATAL не было. SecondaryNameNode создал непустые файлы `fsimage`. Результаты сохранены в [verification.txt](evidence/verification.txt), [secondary-checkpoint.txt](evidence/secondary-checkpoint.txt) и [idempotence.txt](evidence/idempotence.txt).
-
-11.10.2026 в 20:14 МСК дополнительно выполнил `scripts/review.sh`. Он подтвердил состояние active/enabled у всех служб, три живых DataNode, отсутствие ошибок томов и проблем с репликацией, целостность HDFS и наличие checkpoint. Вывод — [review.txt](evidence/review.txt).
+Вывод команд сохранили в [verification.txt](evidence/verification.txt). Повторное развёртывание описано в [idempotence.txt](evidence/idempotence.txt), работа SecondaryNameNode — в [secondary-checkpoint.txt](evidence/secondary-checkpoint.txt). Дополнительная проверка 11.10.2026 в 20:14 МСК завершилась `REVIEW_OK`: [review.txt](evidence/review.txt).
 
 ## Что пришлось исправить
 
-В `/etc/hosts` собственное имя машины было связано с `127.0.1.1`. Из-за этого Hadoop мог использовать loopback вместо внутреннего адреса узла. Я исправил привязку имени к IP сети `10.34.0.0/24` и явно задал внутренние адреса служб. Исправление включил в `node-setup.sh`; исходный `/etc/hosts` сохраняется как `/etc/hosts.hw1-backup`.
+Сначала собственные имена машин разрешались в `127.0.1.1`. Из-за этого Hadoop мог использовать loopback вместо внутреннего адреса. Мы исправили привязку имён к IP сети `10.34.0.0/24` и добавили это исправление в `node-setup.sh`. Исходный `/etc/hosts` сохраняется в `/etc/hosts.hw1-backup`.
 
-Скрипты находятся в [scripts/](scripts/), результаты команд — в [evidence/](evidence/). [Условие задания на сайте курса](https://go.teachbase.ru/education/listener/course_player/sessions/1415858/tasks/412727).
+## Файлы работы
 
-## Репозитории сдачи
-
-- [ДЗ №1 — HDFS](https://github.com/zarmeux/hw1-hdfs).
+- [INSTALL.md](INSTALL.md) — требования, установка и управление кластером.
+- [scripts/](scripts/) — скрипты установки и проверок.
+- [evidence/REPORT.md](evidence/REPORT.md) — результаты проверки.
 - [ДЗ №2 — YARN и веб-интерфейсы](https://github.com/zarmeux/hw2-yarn).
+- [Условие задания](https://go.teachbase.ru/education/listener/course_player/sessions/1415858/tasks/412727).
